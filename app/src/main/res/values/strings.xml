@@ -4,4 +4,8 @@
     <string name="username_hint">Adres email lub nick</string>
     <string name="password_hint">Hasło</string>
     <string name="action_settings">Settings</string>
+    <string name="forget_password">Zapomniałeś hasła?</string>
+    <string name="recover_account">Odzyskaj konto</string>
+    <string name="no_account">Nie masz konta?</string>
+    <string name="sign_up">Zarejestruj się</string>
 </resources>
