@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">E-testy</string>
     <string name="login">Zaloguj</string>
-    <string name="username_hint">Adres email lub nick</string>
+    <string name="username_hint">Adres email lub login</string>
     <string name="password_hint">Hasło</string>
     <string name="action_settings">Settings</string>
     <string name="forget_password">Zapomniałeś hasła?</string>
