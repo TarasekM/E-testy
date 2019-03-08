@@ -11,8 +11,7 @@
         android:id="@+id/background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        />
+        android:background="@color/colorWhite" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
