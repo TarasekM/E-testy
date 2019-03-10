@@ -8,4 +8,7 @@
     <string name="recover_account">Odzyskaj konto</string>
     <string name="no_account">Nie masz konta?</string>
     <string name="sign_up">Zarejestruj się</string>
+    <string name="recovery_label">Odzyskaj konto</string>
+    <string name="recovery_enter_email">Podaj swój adres email lub login:</string>
+    <string name="reset_password">Zresetuj hasło</string>
 </resources>

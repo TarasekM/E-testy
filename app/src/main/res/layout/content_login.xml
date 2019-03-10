@@ -66,9 +66,8 @@
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textCursorDrawable="@drawable/default_text_cursor"
-
-
         android:textSize="14sp"
+
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
