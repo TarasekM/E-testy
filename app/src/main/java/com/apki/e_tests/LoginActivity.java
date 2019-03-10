@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -14,6 +15,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         configureLoginButton();
+        configureRecoveryLink();
 
     }
 
@@ -26,5 +28,15 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void configureRecoveryLink(){
+        TextView textView = findViewById(R.id.linkRecoverAccount);
+        textView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(LoginActivity.this, PasswordRecoveryActivity.class));
+        }
+    });
     }
 }
