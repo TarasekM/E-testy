@@ -16,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         configureLoginButton();
         configureRecoveryLink();
+        configureNewAccountActivity();
 
     }
 
@@ -38,5 +39,14 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, PasswordRecoveryActivity.class));
         }
     });
+    }
+    private void configureNewAccountActivity(){
+        TextView textView = findViewById(R.id.linkSignUp);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
+            }
+        });
     }
 }
