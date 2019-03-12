@@ -4,12 +4,14 @@
     <string name="username_hint">Adres email lub login</string>
     <string name="password_hint">Hasło</string>
     <string name="enter_email"> Podaj adres email:</string>
+    <string name="enter_nickname">Podaj swój nick:</string>
     <string name="email"> Adres email</string>
     <string name="action_settings">Settings</string>
     <string name="forget_password">Zapomniałeś hasła?</string>
     <string name="recover_account">Odzyskaj konto</string>
     <string name="no_account">Nie masz konta?</string>
     <string name="sign_up">Zarejestruj się</string>
+    <string name="create_account">Stwórz konto</string>
     <string name="recovery_label">Odzyskaj konto</string>
     <string name="recovery_enter_email">Podaj swój adres email lub login:</string>
     <string name="reset_password">Zresetuj hasło</string>
