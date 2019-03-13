@@ -19,7 +19,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/colorLightBlue"
+        android:background="@drawable/rounded_button"
         android:text="@string/login"
         android:textColor="@color/colorInputBackground"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/colorInputBackground"
+        android:background="@drawable/rounded_input"
         android:ems="10"
         android:hint="@string/username_hint"
         android:inputType="textPersonName"
@@ -68,12 +68,16 @@
         android:textCursorDrawable="@drawable/default_text_cursor"
         android:textSize="14sp"
 
+
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textAppName"
         app:layout_constraintVertical_bias="0.333" />
+
+
+
 
     <EditText
         android:id="@+id/inputPassword"
@@ -85,7 +89,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/colorInputBackground"
+        android:background="@drawable/rounded_input"
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
