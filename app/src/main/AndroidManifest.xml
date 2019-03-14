@@ -12,8 +12,7 @@
         <activity
             android:name=".CreateAccountActivity"
             android:label="@string/create_account"
-            android:theme="@style/AppTheme.PopupOverlay"
-            />
+            android:theme="@style/AppTheme.PopupOverlay" />
         <activity
             android:name=".PasswordRecoveryActivity"
             android:label="@string/recovery_label"
