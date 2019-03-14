@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_login">
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/loginLink"
         android:layout_width="250dp"
         android:layout_height="62dp"
         android:layout_marginStart="8dp"
@@ -43,7 +43,7 @@
         android:textAlignment="center"
         android:textColor="@color/colorBlack"
         android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintBottom_toTopOf="@+id/loginLink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,7 @@
         android:textSize="14sp"
 
 
-        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintBottom_toTopOf="@+id/loginLink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +98,7 @@
 
 
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintBottom_toTopOf="@+id/loginLink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +120,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintTop_toBottomOf="@+id/loginLink"
         app:layout_constraintVertical_bias="0.103" />
 
     <TextView
