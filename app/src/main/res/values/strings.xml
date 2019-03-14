@@ -20,4 +20,6 @@
     <string name="reset_password">Zresetuj hasło</string>
     <string name="next">Dalej</string>
     <string name="avatar">Avatar</string>
+    <string name="cancel">Anuluj</string>
+    <string name="user_exists_message">Adres email już jest zajęty.\n Czy chcesz się zalogować?</string>
 </resources>
