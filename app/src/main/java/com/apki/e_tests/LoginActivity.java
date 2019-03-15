@@ -3,7 +3,7 @@ package com.apki.e_tests;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
@@ -86,9 +86,34 @@ public class LoginActivity extends AppCompatActivity {
                         if (validate){
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
+                        }else {
+                            showWrongPasswordAlert();
                         }
                     }
                 });
+    }
+
+    private void showWrongPasswordAlert(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(LoginActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.activity_pop_up_on_wrong_password,null);
+        TextView recover = mView.findViewById(R.id.recoveryLink);
+        TextView cancel = mView.findViewById(R.id.cancel);
+        mBuilder.setView(mView);
+        final AlertDialog popup = mBuilder.create();
+        popup.show();
+        popup.getWindow().setLayout(840, 640);
+        recover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, PasswordRecoveryActivity.class));
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
     }
 
 }
