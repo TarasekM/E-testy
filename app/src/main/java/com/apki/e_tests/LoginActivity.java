@@ -3,30 +3,29 @@ package com.apki.e_tests;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private static final String TAG = "user";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        addToDB();
+
         setContentView(R.layout.activity_login);
         configureLoginButton();
         configureRecoveryLink();
@@ -34,40 +33,16 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void addToDB(){
-        FirebaseApp.initializeApp(this);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Create a new user with a first and last name
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
-
-        // Add a new document with a generated ID
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-    }
-
     private void configureLoginButton(){
         Button loginButton = findViewById(R.id.loginLink);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                EditText edUsername = findViewById(R.id.inputUsername);
+                EditText edPassword = findViewById(R.id.inputPassword);
+                String username = edUsername.getText().toString();
+                String password = edPassword.getText().toString();
+                validateAccount(username, password);
             }
         });
     }
@@ -81,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     });
     }
+
     private void configureNewAccountActivity(){
         TextView textView = findViewById(R.id.linkSignUp);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -90,4 +66,29 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void validateAccount(String username, final String password){
+        db.collection("users").whereEqualTo("email", username)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        boolean validate = false;
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getData().get("password").equals(password)){
+                                    validate = true;
+                                }
+                            }
+                        } else {
+                            Log.w("doc", "Error getting documents.", task.getException());
+                        }
+                        if (validate){
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    }
+                });
+    }
+
 }
