@@ -22,4 +22,6 @@
     <string name="avatar">Avatar</string>
     <string name="cancel">Anuluj</string>
     <string name="user_exists_message">Adres email już jest zajęty.\n Czy chcesz się zalogować?</string>
+    <string name="wrong_password_message">Jeżeli zapomniałeś/aś hasła pomożemy Ci je odzyskać</string>
+    <string name="try_again">Spróbuj ponownie</string>
 </resources>
