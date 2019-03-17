@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,11 +28,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CreateAccountActivity extends AppCompatActivity {
 
     private static final String TAG = "user";
+
+    Button dalej, dalej2;
+    EditText mail, login, password, passwordConfirm;
 
     ConstraintLayout email_content, log_passw_content;
     Map<String, Object> user = new HashMap<>();
@@ -41,15 +49,61 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
         // Add back button
         FirebaseApp.initializeApp(this);
+
         email_content = findViewById(R.id.email_content);
         log_passw_content = findViewById(R.id.nick_password_content);
 
         email_content.setVisibility(ConstraintLayout.VISIBLE);
         log_passw_content.setVisibility(ConstraintLayout.GONE);
-        configureNextButton();
-        configureSecondNextButton();
+
+        mail = (EditText)findViewById(R.id.inputEmail);
+        dalej = (Button)findViewById(R.id.next);
+        dalej.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String validemail = "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                        "\\@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+";
+
+                String email = mail.getText().toString();
+                Matcher matcher = Pattern.compile(validemail).matcher(email);
+
+                if (!matcher.matches()) {
+                    Toast.makeText(getApplicationContext(), "Nieprawidłowy adres email!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    configureNextButton();
+                }
+            }
+        });
+
+        login = (EditText)findViewById(R.id.inputLogin);
+        password = (EditText)findViewById(R.id.inputPassword);
+        passwordConfirm = (EditText)findViewById(R.id.inputPasswordConfirm);
+        dalej2 = (Button)findViewById(R.id.next2);
+
+        dalej2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (login.length() == 0) {
+                    Toast.makeText(CreateAccountActivity.this, "Puste pole!", Toast.LENGTH_LONG).show();
+                } else if (password.length() == 0) {
+                    Toast.makeText(CreateAccountActivity.this, "Puste pole!", Toast.LENGTH_LONG).show();
+                } else if (passwordConfirm.length() == 0) {
+                    Toast.makeText(CreateAccountActivity.this, "Puste pole!", Toast.LENGTH_LONG).show();
+                } else {
+                    configureSecondNextButton();
+                }
+            }
+        });
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     private void configureNextButton(){
@@ -174,3 +228,4 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
 }
+
