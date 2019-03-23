@@ -11,16 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 
 public class LoginActivity extends AppCompatActivity {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,29 +69,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void validateAccount(String username, final String password){
-        db.collection("users").whereEqualTo("email", username)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        boolean validate = false;
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.getData().get("password").equals(password)){
-                                    validate = true;
-                                }
-                            }
-                        } else {
-                            Log.w("doc", "Error getting documents.", task.getException());
-                        }
-                        if (validate){
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
-                        }else {
-                            showWrongPasswordAlert();
-                        }
-                    }
-                });
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInWithEmailAndPassword(username, password);
+        try {
+            FirebaseUser user = auth.getCurrentUser();
+            user.reload();
+            if(user.isEmailVerified()){
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+            }else{
+                startActivity(new Intent(LoginActivity.this, VerifyAccountActivity.class));
+            }
+        } catch (NullPointerException e) {
+            showWrongPasswordAlert();
+            Log.d("USER NULL", e.toString());
+        }
     }
 
     private void showWrongPasswordAlert(){
