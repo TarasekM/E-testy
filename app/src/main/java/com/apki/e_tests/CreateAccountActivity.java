@@ -37,7 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     Button dalej, dalej2;
-    EditText mail, login, password, passwordConfirm;
+    EditText mail, password, passwordConfirm;
 
     ConstraintLayout email_content, log_passw_content;
     Map<String, Object> user = new HashMap<>();
@@ -80,7 +80,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         });
 
-        login = (EditText)findViewById(R.id.inputLogin);
         password = (EditText)findViewById(R.id.inputPassword);
         passwordConfirm = (EditText)findViewById(R.id.inputPasswordConfirm);
         dalej2 = (Button)findViewById(R.id.next2);
@@ -88,9 +87,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         dalej2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (login.length() == 0) {
-                    Toast.makeText(CreateAccountActivity.this, "Puste pole!", Toast.LENGTH_LONG).show();
-                } else if (password.length() == 0) {
+                if (password.length() == 0) {
                     Toast.makeText(CreateAccountActivity.this, "Puste pole!", Toast.LENGTH_LONG).show();
                 } else if (passwordConfirm.length() == 0) {
                     Toast.makeText(CreateAccountActivity.this, "Puste pole!", Toast.LENGTH_LONG).show();
@@ -168,16 +165,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText etLogin = findViewById(R.id.inputLogin);
                 EditText etPassword = findViewById(R.id.inputPassword);
                 EditText etPasswordConfirm = findViewById(R.id.inputPasswordConfirm);
 
-                String login = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 String passwordConfirm = etPasswordConfirm.getText().toString();
 
                 if(password.equals(passwordConfirm)){
-                    user.put("username", login);
                     user.put("password",password);
                     saveData(user);
                 }

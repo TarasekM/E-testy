@@ -15,52 +15,9 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/enterLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="22dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/enter_login"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.06" />
-
-        <EditText
-            android:id="@+id/inputLogin"
-            android:layout_width="250dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/rounded_input"
-            android:ems="10"
-            android:hint="@string/login_box_hint"
-            android:inputType="textEmailAddress"
-            android:textAlignment="center"
-            android:textCursorDrawable="@drawable/default_text_cursor"
-            android:textSize="14sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enterLogin"
-            app:layout_constraintVertical_bias="0.013" />
-
-        <TextView
             android:id="@+id/enterPassword"
             android:layout_width="wrap_content"
-            android:layout_height="22dp"
+            android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
@@ -71,8 +28,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputLogin"
-            app:layout_constraintVertical_bias="0.038" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.205" />
 
         <TextView
             android:id="@+id/enterPasswordConfirm"
@@ -87,14 +44,15 @@
             android:text="@string/enter_password_confirm"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inputPassword"
-            app:layout_constraintVertical_bias="0.044" />
+            app:layout_constraintVertical_bias="0.048" />
 
         <EditText
             android:id="@+id/inputPassword"
             android:layout_width="250dp"
-            android:layout_height="42dp"
+            android:layout_height="40dp"
 
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
@@ -114,19 +72,17 @@
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/enterPassword"
-            app:layout_constraintVertical_bias="0.041" />
+            app:layout_constraintVertical_bias="0.043" />
 
         <EditText
             android:id="@+id/inputPasswordConfirm"
             android:layout_width="250dp"
-            android:layout_height="42dp"
+            android:layout_height="40dp"
 
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_input"
             android:ems="10"
             android:hint="@string/password_hint"
@@ -136,14 +92,15 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/enterPasswordConfirm"
-            app:layout_constraintVertical_bias="0.055" />
+            app:layout_constraintVertical_bias="0.066" />
 
         <Button
             android:id="@+id/next2"
             android:layout_width="250dp"
-            android:layout_height="62dp"
+            android:layout_height="60dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
@@ -158,7 +115,7 @@
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inputPasswordConfirm"
-            app:layout_constraintVertical_bias="0.077" />
+            app:layout_constraintVertical_bias="0.074" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -172,7 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="170dp" />
+            app:layout_constraintGuide_begin="150dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline3"
@@ -186,28 +143,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="220dp" />
+            app:layout_constraintGuide_begin="200dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="290dp" />
+            app:layout_constraintGuide_begin="270dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="340dp" />
+            app:layout_constraintGuide_begin="320dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="410dp" />
+            app:layout_constraintGuide_begin="390dp" />
 
     </android.support.constraint.ConstraintLayout>
 
