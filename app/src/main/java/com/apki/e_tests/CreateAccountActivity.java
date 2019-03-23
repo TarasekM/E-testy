@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,12 +34,13 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private static final String TAG = "user";
 
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+
     Button dalej, dalej2;
     EditText mail, login, password, passwordConfirm;
 
     ConstraintLayout email_content, log_passw_content;
     Map<String, Object> user = new HashMap<>();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,30 +113,26 @@ public class CreateAccountActivity extends AppCompatActivity {
                 EditText mEdit = findViewById(R.id.inputEmail);
                 String emailData = mEdit.getText().toString();
                 if(!emailData.equals("")){
-                    isValidate(emailData, db);
+                    isValidate(emailData);
                     user.put("email", emailData);
                 }
             }
         });
     }
 
-    private void isValidate(final String emailData , FirebaseFirestore db){
+    private void isValidate(final String emailData ){
 
-        db.collection("users").whereEqualTo("email",emailData)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        auth.fetchSignInMethodsForEmail(emailData)
+                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        boolean exists = false;
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                exists = true;
-                                showEmailExistsAlert();
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                        if (!exists){
+                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                        if(!task.getResult().getSignInMethods().isEmpty()){
+                            showEmailExistsAlert();
+                        }else{
+                            Log.d(TAG, "doesn't exists");
+                            Toast.makeText(CreateAccountActivity.this,
+                                    "EMAIL AVAILABLE",
+                                    Toast.LENGTH_SHORT).show();
                             email_content.setVisibility(ConstraintLayout.GONE);
                             log_passw_content.setVisibility(ConstraintLayout.VISIBLE);
                         }
@@ -184,30 +179,51 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if(password.equals(passwordConfirm)){
                     user.put("username", login);
                     user.put("password",password);
-                    saveData(user, db);
+                    saveData(user);
                 }
 
-                startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
+                Intent intent = new Intent(CreateAccountActivity.this, VerifyAccountActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
     }
 
-    private void saveData(Map user, FirebaseFirestore db){
+    private void saveData(Map user){
+        String email = user.get("email").toString();
+        String password = user.get("password").toString();
 
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        auth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "createUserWithEmailAndPassword : success");
+                            final FirebaseUser user = auth.getCurrentUser();
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.e(TAG, "successful");
+                                        Toast.makeText(CreateAccountActivity.this,
+                                                "Verification email sent to " + user.getEmail(),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.e(TAG, "sendEmailVerification", task.getException());
+                                        Toast.makeText(CreateAccountActivity.this,
+                                                "Failed to send verification email.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
 
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+
+
+                        } else{
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(CreateAccountActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }

@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".VerifyAccountActivity"
+            android:label="@string/email_verification"
+            android:theme="@style/AppTheme.PopupOverlay"></activity>
+        <activity
             android:name=".CreateAccountActivity"
             android:label="@string/create_account"
             android:theme="@style/AppTheme.PopupOverlay" />
