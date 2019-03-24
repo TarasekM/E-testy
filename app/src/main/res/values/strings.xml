@@ -25,9 +25,9 @@
     <string name="wrong_password_message">Jeżeli zapomniałeś/aś hasła pomożemy Ci je odzyskać</string>
     <string name="try_again">Spróbuj ponownie</string>
     <string name="send_again">Wyślij ponownie</string>
-    <string name="descrption_email_verificaiton">Na podany przez Ciebie mail wyslaliśmy email z linkiem aktywacyjnym. Kliknij w niego aby aktywowac konto.</string>
+    <string name="descrption_email_verificaiton">Na podany przez Ciebie adres wysłaliśmy email z linkiem aktywacyjnym. Kliknij w niego aby aktywować konto.</string>
     <string name="email_verification">Weryfikacja email</string>
-    <string name="ask_email_not_recived">Nie dostaleś maila z linkiem aktywacyjnym?</string>
-    <string name="email_already_verified">Zweryfikowaleś email?</string>
+    <string name="ask_email_not_recived">Nie dostałeś emaila z linkiem aktywacyjnym?</string>
+    <string name="email_already_verified">Zweryfikowałeś email?</string>
     <string name="create_test_label">Utwórz Test</string>
 </resources>
