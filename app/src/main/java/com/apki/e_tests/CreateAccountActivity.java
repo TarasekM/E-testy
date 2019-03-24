@@ -128,7 +128,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         }else{
                             Log.d(TAG, "doesn't exists");
                             Toast.makeText(CreateAccountActivity.this,
-                                    "EMAIL AVAILABLE",
+                                    "Adres email jest dostępny",
                                     Toast.LENGTH_SHORT).show();
                             email_content.setVisibility(ConstraintLayout.GONE);
                             log_passw_content.setVisibility(ConstraintLayout.VISIBLE);
@@ -215,7 +215,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                         } else{
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(CreateAccountActivity.this, "Authentication failed.",
+                            Toast.makeText(CreateAccountActivity.this, "Autentykacja niezakończona.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
