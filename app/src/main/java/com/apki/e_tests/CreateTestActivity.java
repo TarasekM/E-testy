@@ -31,7 +31,7 @@ public class CreateTestActivity extends AppCompatActivity {
 
     LinearLayout ansContainer;
     ArrayList<View> records = new ArrayList<>();
-    Map<String,Map<String, String>> questions = new HashMap<>();
+    Map<String,Map<String, Object>> questions = new HashMap<>();
     int questionCount = 0;
 
     @Override
@@ -96,17 +96,21 @@ public class CreateTestActivity extends AppCompatActivity {
 
     private void nextQuestion(){
         questionCount++;
-        Map<String, String> question = new HashMap<>();
+        Map<String, Object> question = new HashMap<>();
         EditText sentence = findViewById(R.id.sentence);
         question.put("sentence", sentence.getText().toString());
+        ArrayList<String> answers = new ArrayList<>();
+        ArrayList<String> checks = new ArrayList<>();
 
         for (View view: records) {
-            TextView letter = view.findViewById(R.id.letter);
             EditText answer = view.findViewById(R.id.answer);
             CheckBox checkBox = view.findViewById(R.id.checkBox);
-            question.put("" + letter.getText().toString().charAt(0), answer.getText().toString());
-            question.put(letter.getText().toString().charAt(0) + " isTrue", checkBox.isChecked() + "");
+            answers.add(answer.getText().toString());
+            checks.add(checkBox.isChecked() + "");
         }
+
+        question.put("answers", answers);
+        question.put("isTrue", checks);
         questions.put("Question" + questionCount, question);
 
         //Clear UI
