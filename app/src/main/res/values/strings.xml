@@ -29,4 +29,5 @@
     <string name="email_verification">Weryfikacja email</string>
     <string name="ask_email_not_recived">Nie dostaleś maila z linkiem aktywacyjnym?</string>
     <string name="email_already_verified">Zweryfikowaleś email?</string>
+    <string name="create_test_label">Utwórz Test</string>
 </resources>
