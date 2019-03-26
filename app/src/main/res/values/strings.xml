@@ -30,4 +30,7 @@
     <string name="ask_email_not_recived">Nie dostałeś emaila z linkiem aktywacyjnym?</string>
     <string name="email_already_verified">Zweryfikowałeś email?</string>
     <string name="create_test_label">Utwórz Test</string>
+    <string name="test_title_label">Tytuł testu</string>
+    <string name="section_label">Dział / Zakres materiału</string>
+    <string name="subject_label">Przedmiot</string>
 </resources>
