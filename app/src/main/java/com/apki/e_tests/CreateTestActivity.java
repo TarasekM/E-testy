@@ -3,14 +3,16 @@ package com.apki.e_tests;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,13 +25,30 @@ public class CreateTestActivity extends AppCompatActivity {
 
     LinearLayout ansContainer;
     ArrayList<View> records = new ArrayList<>();
+    ArrayList<Question> questions = new ArrayList<>();
     Test test = new Test();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_test_settings);
+
+        // Add back button
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         configureNextButton();
+    }
+
+    private void configureSaveDataButton(){
+        Button save = findViewById(R.id.saveTestButton);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test.saveDataToFirestore(db);
+                finish();
+            }
+        });
     }
 
     private void configureNextButton(){
@@ -46,34 +65,46 @@ public class CreateTestActivity extends AppCompatActivity {
                 test.setSubject(edSubject.getText().toString());
                 test.setSection(edSection.getText().toString());
                 // Change view
-                setContentView(R.layout.activity_create_test);
-                ansContainer = findViewById(R.id.answerContainer);
-                // Configure buttons
-                configureAddAnswerButton();
-                configureNextQuestionButton();
-                configureSaveDataButton();
+                setContentView(R.layout.content_create_test);
+                configureAddQuestionButton();
             }
         });
     }
 
-    private void configureSaveDataButton(){
-        Button save = findViewById(R.id.save);
-        save.setOnClickListener(new View.OnClickListener() {
+    private void configureAddQuestionButton(){
+        Button createQuestion = findViewById(R.id.addQuestionButton);
+        createQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                test.saveDataToFirestore(db);
-                startActivity(new Intent(CreateTestActivity.this, MainActivity.class));
-                finish();
+                setContentView(R.layout.activity_create_question);
+                ansContainer = findViewById(R.id.answerContainer);
+                // Configure buttons
+                TextView questionLabel = findViewById(R.id.questionLabel);
+                questionLabel.setText("Pytanie " + (questions.size() + 1));
+                configureAddAnswerButton();
+                configureNextQuestionButton();
             }
         });
     }
 
     private void configureNextQuestionButton(){
-        Button next = findViewById(R.id.next);
+        Button next = findViewById(R.id.saveQuestion);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nextQuestion();
+
+                setContentView(R.layout.content_create_test);
+                LinearLayout questionPreviewContainer = findViewById(R.id.questionPreviewContainer);
+
+                Log.d("Size",""+ questions.size());
+                for(Question question : questions){
+                    View view = getLayoutInflater().inflate(R.layout.question_preview_template, null);
+                    fillQuestionPreview(view, question, questionPreviewContainer.getChildCount() + 1);
+                    questionPreviewContainer.addView(view, questionPreviewContainer.getChildCount());
+                }
+                configureSaveDataButton();
+                configureAddQuestionButton();
             }
         });
     }
@@ -84,15 +115,13 @@ public class CreateTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int childCount = ansContainer.getChildCount();
-                if (childCount < 7){
-                    View newAnswer = getLayoutInflater().inflate(R.layout.answer_template,null);
+                    View newAnswer = getLayoutInflater().inflate(R.layout.answer_template, null);
                     fillRecord(newAnswer, childCount);
                     records.add(newAnswer);
                     ansContainer.addView(newAnswer, childCount);
-                }else{
-                    Toast.makeText(CreateTestActivity.this,
-                            "Can't create more answers",
-                            Toast.LENGTH_SHORT).show();
+                if(childCount >= 6){
+                    ImageView button = findViewById(R.id.addInput);
+                    button.setVisibility(View.GONE);
                 }
             }
         });
@@ -100,7 +129,7 @@ public class CreateTestActivity extends AppCompatActivity {
     }
 
     private void fillRecord(View view, int childCount){
-        TextView letter = view.findViewById(R.id.letter);
+        TextView letter = view.findViewById(R.id.letterPreview);
         EditText newEditText = view.findViewById(R.id.answer);
         char character = (char)('A' + childCount);
         String text = String.format("%c.", character);
@@ -108,11 +137,51 @@ public class CreateTestActivity extends AppCompatActivity {
         newEditText.setHint(String.format("Odpowiedź %c", character));
     }
 
+    private void fillQuestionPreview(View view, Question question, int counter){
+        TextView questionContent = view.findViewById(R.id.questionContent);
+        TextView questionLabel = view.findViewById(R.id.titleText);
+
+        questionContent.setText(question.getSentence());
+        questionLabel.setText("Pytanie " + counter);
+
+        ArrayList<String> answers = question.getAnswers();
+        ArrayList<Boolean> checks = question.getChecks();
+
+        LinearLayout leftColumn = view.findViewById(R.id.leftColumn);
+        LinearLayout rightColumn = view.findViewById(R.id.rightColumn);
+
+        for (int i = 0; i < question.getAnswers().size(); i++){
+            View newAnswerPreview = getLayoutInflater().inflate(R.layout.answer_preview_template,null);
+            ImageView isTrue = newAnswerPreview.findViewById(R.id.isTrue);
+            TextView letter = newAnswerPreview.findViewById(R.id.letterPreview);
+            TextView answer = newAnswerPreview.findViewById(R.id.answerPreview);
+
+            answer.setText(answers.get(i));
+
+            letter.setText(String.format("%c.", 'A' + i));
+
+            if(checks.get(i)){
+                isTrue.setImageResource(R.drawable.green_circle);
+            }else {
+                isTrue.setImageResource(R.drawable.red_circle);
+            }
+
+            if( i == 0){
+                leftColumn.addView(newAnswerPreview, leftColumn.getChildCount());
+            }else if( i % 2 == 1){
+                rightColumn.addView(newAnswerPreview, rightColumn.getChildCount());
+            }else {
+                leftColumn.addView(newAnswerPreview, leftColumn.getChildCount());
+            }
+        }
+    }
+
     private void nextQuestion(){
         Question question = new Question();
-        EditText sentence = findViewById(R.id.sentence);
-        question.setSentence(sentence.getText().toString());
+        EditText edSentence = findViewById(R.id.sentence);
+        String sentence = edSentence.getText().toString();
 
+        question.setSentence(sentence);
         for (View view: records) {
             EditText answer = view.findViewById(R.id.answer);
             CheckBox checkBox = view.findViewById(R.id.checkBox);
@@ -120,9 +189,12 @@ public class CreateTestActivity extends AppCompatActivity {
         }
 
         test.addQuestion(question);
+        questions.add(question);
+
         //Clear UI
+
         records.clear();
         ansContainer.removeAllViews();
-        sentence.setText("");
+        edSentence.setText("");
     }
 }

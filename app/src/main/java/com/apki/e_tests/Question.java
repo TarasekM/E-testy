@@ -17,19 +17,12 @@ public class Question {
         // question = new HashMap<>();
         answers = new ArrayList<>();
         checks = new ArrayList<>();
+        sentence = "null";
     }
 
     public void addAnswer(String answer, Boolean isTrue){
         answers.add(answer);
         checks.add(isTrue);
-    }
-
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
-    }
-
-    public String getSentence() {
-        return sentence;
     }
 
     public Map<String, Object> getAsMap(){
@@ -52,4 +45,21 @@ public class Question {
             super(message);
         }
     }
+
+    public void setSentence(String sentence) {
+        this.sentence = sentence;
+    }
+
+    public String getSentence() {
+        return sentence;
+    }
+
+    public ArrayList<String> getAnswers() {
+        return answers;
+    }
+
+    public ArrayList<Boolean> getChecks() {
+        return checks;
+    }
+
 }

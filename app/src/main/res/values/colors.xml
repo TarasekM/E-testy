@@ -7,7 +7,7 @@
     <color name="colorDarkGrey">#363636</color>
     <color name="colorLightBlue">#4D94FF</color>
     <color name="colorLink">#4655FF</color>
-    <color name="colorInputBackground">#EEEEF2</color>
+    <color name="colorInputBackground">#EBEAEA</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorTransparentBlack">#40000000</color>
 </resources>
