@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/circle_shape"
+        android:background="@drawable/add_shape"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,6 +103,21 @@
         app:layout_constraintTop_toBottomOf="@+id/answerContainer"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/add_white" />
+
+    <ImageButton
+        android:id="@+id/removeInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/delete_shape"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answerContainer"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/sub_white" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline19"

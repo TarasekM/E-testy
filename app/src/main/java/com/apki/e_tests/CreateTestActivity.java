@@ -40,11 +40,25 @@ public class CreateTestActivity extends AppCompatActivity {
         configureNextButton();
     }
 
+    private void configureButtonsForQuestionLayout(){
+        configureAddQuestionButton();
+        configureSaveDataButton();
+    }
+
+    private void configureButtonsForAnswerLayout(){
+        configureAddAnswerButton();
+        configureRemoveQuestionButton();
+        configureNextQuestionButton();
+    }
+
     private void configureSaveDataButton(){
         Button save = findViewById(R.id.saveTestButton);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for (Question question : questions){
+                    test.addQuestion(question);
+                }
                 test.saveDataToFirestore(db);
                 finish();
             }
@@ -66,7 +80,7 @@ public class CreateTestActivity extends AppCompatActivity {
                 test.setSection(edSection.getText().toString());
                 // Change view
                 setContentView(R.layout.content_create_test);
-                configureAddQuestionButton();
+                configureButtonsForQuestionLayout();
             }
         });
     }
@@ -81,8 +95,7 @@ public class CreateTestActivity extends AppCompatActivity {
                 // Configure buttons
                 TextView questionLabel = findViewById(R.id.questionLabel);
                 questionLabel.setText("Pytanie " + (questions.size() + 1));
-                configureAddAnswerButton();
-                configureNextQuestionButton();
+                configureButtonsForAnswerLayout();
             }
         });
     }
@@ -93,20 +106,24 @@ public class CreateTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 nextQuestion();
-
                 setContentView(R.layout.content_create_test);
-                LinearLayout questionPreviewContainer = findViewById(R.id.questionPreviewContainer);
-
-                Log.d("Size",""+ questions.size());
-                for(Question question : questions){
-                    View view = getLayoutInflater().inflate(R.layout.question_preview_template, null);
-                    fillQuestionPreview(view, question, questionPreviewContainer.getChildCount() + 1);
-                    questionPreviewContainer.addView(view, questionPreviewContainer.getChildCount());
-                }
-                configureSaveDataButton();
-                configureAddQuestionButton();
+                fillPreviews();
             }
         });
+    }
+
+    private void fillPreviews(){
+        // refresh layout first
+        setContentView(R.layout.content_create_test);
+
+        LinearLayout questionPreviewContainer = findViewById(R.id.questionPreviewContainer);
+        for(Question question : questions){
+            View view = getLayoutInflater().inflate(R.layout.question_preview_template, null);
+            fillQuestionPreview(view, question, questionPreviewContainer.getChildCount() + 1);
+            questionPreviewContainer.addView(view, questionPreviewContainer.getChildCount());
+        }
+
+        configureButtonsForQuestionLayout();
     }
 
     private void configureAddAnswerButton(){
@@ -128,6 +145,20 @@ public class CreateTestActivity extends AppCompatActivity {
 
     }
 
+    private void configureRemoveQuestionButton(){
+        ImageButton removeButton = findViewById(R.id.removeInput);
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int childCount = ansContainer.getChildCount();
+                if(childCount > 0){
+                    ansContainer.removeViewAt(childCount - 1);
+                    records.remove(records.size() - 1);
+                }
+            }
+        });
+    }
+
     private void fillRecord(View view, int childCount){
         TextView letter = view.findViewById(R.id.letterPreview);
         EditText newEditText = view.findViewById(R.id.answer);
@@ -137,7 +168,7 @@ public class CreateTestActivity extends AppCompatActivity {
         newEditText.setHint(String.format("Odpowiedź %c", character));
     }
 
-    private void fillQuestionPreview(View view, Question question, int counter){
+    private void fillQuestionPreview(View view, final Question question, int counter){
         TextView questionContent = view.findViewById(R.id.questionContent);
         TextView questionLabel = view.findViewById(R.id.titleText);
 
@@ -149,6 +180,9 @@ public class CreateTestActivity extends AppCompatActivity {
 
         LinearLayout leftColumn = view.findViewById(R.id.leftColumn);
         LinearLayout rightColumn = view.findViewById(R.id.rightColumn);
+
+        ImageButton remove = view.findViewById(R.id.removeQuestion);
+        ImageButton edit = view.findViewById(R.id.editQuestion);
 
         for (int i = 0; i < question.getAnswers().size(); i++){
             View newAnswerPreview = getLayoutInflater().inflate(R.layout.answer_preview_template,null);
@@ -174,6 +208,43 @@ public class CreateTestActivity extends AppCompatActivity {
                 leftColumn.addView(newAnswerPreview, leftColumn.getChildCount());
             }
         }
+
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                questions.remove(question);
+                fillPreviews();
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.activity_create_question);
+                ansContainer = findViewById(R.id.answerContainer);
+                ArrayList<String> answers = question.getAnswers();
+                ArrayList<Boolean> checks = question.getChecks();
+                String sentence = question.getSentence();
+
+                for(int i = 0; i < answers.size() ; i++){
+                    View newAnswer = getLayoutInflater().inflate(R.layout.answer_template, null);
+                    fillRecord(newAnswer, ansContainer.getChildCount());
+                    CheckBox check = newAnswer.findViewById(R.id.checkBox);
+                    EditText answer = newAnswer.findViewById(R.id.answer);
+                    check.setChecked(checks.get(i));
+                    answer.setText(answers.get(i));
+                    records.add(newAnswer);
+                    ansContainer.addView(newAnswer, i);
+                }
+                EditText edSentence = findViewById(R.id.sentence);
+                edSentence.setText(sentence);
+                TextView questionLabel = findViewById(R.id.questionLabel);
+                questionLabel.setText("Pytanie " + (questions.size()));
+                questions.remove(question);
+
+                configureButtonsForAnswerLayout();
+            }
+        });
     }
 
     private void nextQuestion(){
@@ -188,7 +259,6 @@ public class CreateTestActivity extends AppCompatActivity {
             question.addAnswer(answer.getText().toString(), checkBox.isChecked());
         }
 
-        test.addQuestion(question);
         questions.add(question);
 
         //Clear UI

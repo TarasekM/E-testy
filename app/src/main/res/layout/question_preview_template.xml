@@ -27,6 +27,38 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
+            <ImageButton
+                android:id="@+id/editQuestion"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.658"
+                app:layout_constraintStart_toEndOf="@+id/titleText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/edit" />
+
+            <ImageButton
+                android:id="@+id/removeQuestion"
+                android:layout_width="37dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.176"
+                app:layout_constraintStart_toEndOf="@+id/editQuestion"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/delete" />
+
             <TextView
                 android:id="@+id/titleText"
                 android:layout_width="wrap_content"
@@ -46,20 +78,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Edytuj"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.75"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.Guideline
