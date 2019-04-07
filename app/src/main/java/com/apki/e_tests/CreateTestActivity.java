@@ -1,9 +1,13 @@
 package com.apki.e_tests;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,6 +22,7 @@ import android.widget.TextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class CreateTestActivity extends AppCompatActivity {
 
@@ -27,6 +32,7 @@ public class CreateTestActivity extends AppCompatActivity {
     ArrayList<View> records = new ArrayList<>();
     ArrayList<Question> questions = new ArrayList<>();
     Test test = new Test();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,13 +151,13 @@ public class CreateTestActivity extends AppCompatActivity {
 
     }
 
-    private void configureRemoveQuestionButton(){
+    private void configureRemoveQuestionButton() {
         ImageButton removeButton = findViewById(R.id.removeInput);
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int childCount = ansContainer.getChildCount();
-                if(childCount > 0){
+                if (childCount > 0) {
                     ansContainer.removeViewAt(childCount - 1);
                     records.remove(records.size() - 1);
                 }
@@ -212,8 +218,26 @@ public class CreateTestActivity extends AppCompatActivity {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                questions.remove(question);
-                fillPreviews();
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateTestActivity.this);
+
+                builder.setCancelable(true);
+                builder.setTitle("Czy na pewno chcesz usunąć pytanie?");
+
+                builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        questions.remove(question);
+                        fillPreviews();
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -266,5 +290,25 @@ public class CreateTestActivity extends AppCompatActivity {
         records.clear();
         ansContainer.removeAllViews();
         edSentence.setText("");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home)
+        {
+            this.finish();
+        }
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
