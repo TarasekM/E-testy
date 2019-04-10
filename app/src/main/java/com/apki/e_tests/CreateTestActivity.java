@@ -1,14 +1,12 @@
 package com.apki.e_tests;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,7 +20,8 @@ import android.widget.TextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Timer;
+
+//TODO Questions should keep assigned index after edit
 
 public class CreateTestActivity extends AppCompatActivity {
 
@@ -33,17 +32,83 @@ public class CreateTestActivity extends AppCompatActivity {
     ArrayList<Question> questions = new ArrayList<>();
     Test test = new Test();
 
+    String toEdit = "null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_test_settings);
+        setContentAsCreateTestSettings();
 
         // Add back button
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+                .findViewById(android.R.id.content)).getChildAt(0);
+        String tag = viewGroup.getTag().toString();
+        System.out.println(tag);
+
+        if(tag.equals("create_question")){
+            setContentAsCreateTest();
+        }else if (tag.equals("create_test")){
+            setContentAsCreateTestSettings();
+        }else if(tag.equals("create_test_settings")){
+            finish();
+        }
+
+    }
+
+    private void configureNextButton(){
+        Button next = findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Find all edit texts
+                EditText edExamTitle = findViewById(R.id.inputExamTitle);
+                EditText edSubject = findViewById(R.id.inputSubject);
+                EditText edSection = findViewById(R.id.inputSection);
+                // Add records to test
+                test.setTitle(edExamTitle.getText().toString());
+                test.setSubject(edSubject.getText().toString());
+                test.setSection(edSection.getText().toString());
+                // Change view
+                setContentAsCreateTest();
+            }
+        });
+    }
+
+    private void setContentAsCreateTestSettings(){
+        setContentView(R.layout.activity_create_test_settings);
+
+        EditText edExamTitle = findViewById(R.id.inputExamTitle);
+        EditText edSubject = findViewById(R.id.inputSubject);
+        EditText edSection = findViewById(R.id.inputSection);
+
+        edExamTitle.setText(test.getTitle());
+        edSubject.setText(test.getSection());
+        edSection.setText(test.getSection());
+
         configureNextButton();
+    }
+
+    private void setContentAsCreateTest(){
+        setContentView(R.layout.content_create_test);
+        fillPreviews();
+        configureButtonsForQuestionLayout();
+    }
+
+    private void setContentAsCreateQuestion(){
+        setContentView(R.layout.activity_create_question);
+
+        ansContainer = findViewById(R.id.answerContainer);
+        TextView questionLabel = findViewById(R.id.questionLabel);
+        questionLabel.setText("Pytanie " + (questions.size() + 1));
+
+        configureButtonsForAnswerLayout();
     }
 
     private void configureButtonsForQuestionLayout(){
@@ -53,7 +118,7 @@ public class CreateTestActivity extends AppCompatActivity {
 
     private void configureButtonsForAnswerLayout(){
         configureAddAnswerButton();
-        configureRemoveQuestionButton();
+        configureRemoveAnswerButton();
         configureNextQuestionButton();
     }
 
@@ -71,37 +136,12 @@ public class CreateTestActivity extends AppCompatActivity {
         });
     }
 
-    private void configureNextButton(){
-        Button next = findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Find all edit texts
-                EditText edExamTitle = findViewById(R.id.inputExamTitle);
-                EditText edSubject = findViewById(R.id.inputSubject);
-                EditText edSection = findViewById(R.id.inputSection);
-                // Add records to test
-                test.setTitle(edExamTitle.getText().toString());
-                test.setSubject(edSubject.getText().toString());
-                test.setSection(edSection.getText().toString());
-                // Change view
-                setContentView(R.layout.content_create_test);
-                configureButtonsForQuestionLayout();
-            }
-        });
-    }
-
     private void configureAddQuestionButton(){
         Button createQuestion = findViewById(R.id.addQuestionButton);
         createQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.activity_create_question);
-                ansContainer = findViewById(R.id.answerContainer);
-                // Configure buttons
-                TextView questionLabel = findViewById(R.id.questionLabel);
-                questionLabel.setText("Pytanie " + (questions.size() + 1));
-                configureButtonsForAnswerLayout();
+                setContentAsCreateQuestion();
             }
         });
     }
@@ -112,8 +152,7 @@ public class CreateTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 nextQuestion();
-                setContentView(R.layout.content_create_test);
-                fillPreviews();
+                setContentAsCreateTest();
             }
         });
     }
@@ -125,11 +164,9 @@ public class CreateTestActivity extends AppCompatActivity {
         LinearLayout questionPreviewContainer = findViewById(R.id.questionPreviewContainer);
         for(Question question : questions){
             View view = getLayoutInflater().inflate(R.layout.question_preview_template, null);
-            fillQuestionPreview(view, question, questionPreviewContainer.getChildCount() + 1);
+            fillQuestionPreview(view, question);
             questionPreviewContainer.addView(view, questionPreviewContainer.getChildCount());
         }
-
-        configureButtonsForQuestionLayout();
     }
 
     private void configureAddAnswerButton(){
@@ -151,13 +188,13 @@ public class CreateTestActivity extends AppCompatActivity {
 
     }
 
-    private void configureRemoveQuestionButton() {
+    private void configureRemoveAnswerButton(){
         ImageButton removeButton = findViewById(R.id.removeInput);
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int childCount = ansContainer.getChildCount();
-                if (childCount > 0) {
+                if(childCount > 0){
                     ansContainer.removeViewAt(childCount - 1);
                     records.remove(records.size() - 1);
                 }
@@ -174,12 +211,12 @@ public class CreateTestActivity extends AppCompatActivity {
         newEditText.setHint(String.format("Odpowiedź %c", character));
     }
 
-    private void fillQuestionPreview(View view, final Question question, int counter){
+    private void fillQuestionPreview(View view, final Question question){
         TextView questionContent = view.findViewById(R.id.questionContent);
         TextView questionLabel = view.findViewById(R.id.titleText);
 
         questionContent.setText(question.getSentence());
-        questionLabel.setText("Pytanie " + counter);
+        questionLabel.setText(question.getLabel());
 
         ArrayList<String> answers = question.getAnswers();
         ArrayList<Boolean> checks = question.getChecks();
@@ -235,6 +272,7 @@ public class CreateTestActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         questions.remove(question);
                         fillPreviews();
+                        configureButtonsForQuestionLayout();
                     }
                 });
                 builder.show();
@@ -263,9 +301,8 @@ public class CreateTestActivity extends AppCompatActivity {
                 EditText edSentence = findViewById(R.id.sentence);
                 edSentence.setText(sentence);
                 TextView questionLabel = findViewById(R.id.questionLabel);
-                questionLabel.setText("Pytanie " + (questions.size()));
-                questions.remove(question);
-
+                questionLabel.setText(question.getLabel());
+                toEdit = question.getLabel();
                 configureButtonsForAnswerLayout();
             }
         });
@@ -283,10 +320,24 @@ public class CreateTestActivity extends AppCompatActivity {
             question.addAnswer(answer.getText().toString(), checkBox.isChecked());
         }
 
-        questions.add(question);
+        int index = 0;
+        for (Question q : questions){
+            if(q.getLabel().equals(toEdit)){
+                question.setLabel(q.getLabel());
+                break;
+            }
+            index++;
+        }
+
+        if (question.getLabel().equals(toEdit)){
+            questions.set(index, question);
+        }else{
+            question.setLabel("Pytanie " + (questions.size() + 1));
+            questions.add(question);
+        }
 
         //Clear UI
-
+        toEdit = "null";
         records.clear();
         ansContainer.removeAllViews();
         edSentence.setText("");
@@ -301,7 +352,7 @@ public class CreateTestActivity extends AppCompatActivity {
 
         if (id == android.R.id.home)
         {
-            this.finish();
+            onBackPressed();
         }
 
         //noinspection SimplifiableIfStatement

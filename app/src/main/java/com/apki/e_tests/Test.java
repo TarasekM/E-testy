@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Test {
 
-    private String title, subject, section;
+    private String title = "", subject = "", section = "";
     private Map<String, Object> questions = new HashMap<>();
     // TODO add time restriction
 

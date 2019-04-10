@@ -13,11 +13,14 @@ public class Question {
 
     private String sentence;
 
+    private String label;
+
     Question(){
         // question = new HashMap<>();
         answers = new ArrayList<>();
         checks = new ArrayList<>();
         sentence = "null";
+        label = "Pytanie";
     }
 
     public void addAnswer(String answer, Boolean isTrue){
@@ -52,6 +55,14 @@ public class Question {
 
     public String getSentence() {
         return sentence;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public ArrayList<String> getAnswers() {
