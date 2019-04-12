@@ -9,6 +9,17 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/testPreviewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addTest"
         android:layout_width="wrap_content"
