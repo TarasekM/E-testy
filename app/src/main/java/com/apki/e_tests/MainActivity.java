@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,14 +63,26 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout testPreviewContainer = findViewById(R.id.testPreviewContainer);
         for (QueryDocumentSnapshot document : data) {
             Log.d("doc", document.getId() + " => " + document.getData());
+
             View view = getLayoutInflater().inflate(R.layout.test_preview_template, null);
             TextView testTitle = view.findViewById(R.id.testTitleText);
             TextView subject = view.findViewById(R.id.subjectText);
             TextView section = view.findViewById(R.id.sectionText);
-            Map<String, Object> map = (Map<String,Object>) document.getData().get("Details");
-            testTitle.setText(map.get("examTitle").toString());
-            subject.setText(map.get("subject").toString());
-            section.setText(map.get("section").toString());
+            final Test test = new Test(document);
+
+            testTitle.setText(test.getTitle());
+            subject.setText(test.getSubject());
+            section.setText(test.getSection());
+            Button startTest = view.findViewById(R.id.startTest);
+
+            startTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, PerformTest.class);
+                    intent.putExtra("TEST", test);
+                    startActivity(intent);
+                }
+            });
 
             testPreviewContainer.addView(view, testPreviewContainer.getChildCount());
         }

@@ -7,33 +7,54 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
 
-public class Test {
 
-    private String title = "", subject = "", section = "";
-    private Map<String, Object> questions = new HashMap<>();
+public class Test implements Serializable {
+
+    private String title, subject , section;
+    private ArrayList<Question> questions;
     // TODO add time restriction
 
+    public Test(){
+        title = "";
+        subject = "";
+        section = "";
+        questions = new ArrayList<>();
+    }
+
+    public Test(QueryDocumentSnapshot document){
+        retrieveTestObject(document);
+    }
+
+    private void retrieveTestObject(QueryDocumentSnapshot document){
+
+        this.setTitle(document.get("title").toString());
+        this.setSubject(document.get("subject").toString());
+        this.setSection(document.get("section").toString());
+        this.setQuestions(retrieveQuestions(document));
+    }
+
+    private ArrayList<Question> retrieveQuestions(QueryDocumentSnapshot document){
+        ArrayList<Question> q = new ArrayList<>();
+        for (Map<String, Object> map: (ArrayList<Map<String,Object>>) document.get("questions")) {
+            q.add(new Question(map));
+        }
+        return q;
+    }
+
     public void addQuestion(Question question){
-        String questionLabel = "Question " + (questions.size() + 1);
-        questions.put(questionLabel, question.getAsMap());
+        questions.add(question);
     }
 
     public void saveDataToFirestore(FirebaseFirestore db){
 
-        Map<String, Object> details = new HashMap<>();
-
-        details.put("examTitle", title);
-        details.put("subject", subject);
-        details.put("section", section);
-        questions.put("Details", details);
-
-
         db.collection("TEST")
-                .add(questions)
+                .add(this)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -60,6 +81,10 @@ public class Test {
         this.subject = subject;
     }
 
+    public void setQuestions(ArrayList<Question>questions) {
+        this.questions = questions;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -70,5 +95,9 @@ public class Test {
 
     public String getSubject() {
         return subject;
+    }
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
     }
 }

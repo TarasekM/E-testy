@@ -1,52 +1,35 @@
 package com.apki.e_tests;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-public class Question {
+public class Question implements Serializable {
 
-    // private Map<String, Object> question;
 
     private ArrayList<String> answers;
     private ArrayList<Boolean> checks;
 
     private String sentence;
 
-    private String label;
+    private String label = "Pytanie";
 
     Question(){
-        // question = new HashMap<>();
         answers = new ArrayList<>();
         checks = new ArrayList<>();
         sentence = "null";
-        label = "Pytanie";
+    }
+
+    Question(Map<String, Object> data){
+        answers = (ArrayList<String>) data.get("answers");
+        checks = (ArrayList<Boolean>) data.get("checks");
+        sentence = (String) data.get("sentence");
+        label = (String) data.get("label");
     }
 
     public void addAnswer(String answer, Boolean isTrue){
         answers.add(answer);
         checks.add(isTrue);
-    }
-
-    public Map<String, Object> getAsMap(){
-        Map<String, Object> question = new HashMap<>();
-
-//        if(sentence.isEmpty() || answers.isEmpty() || checks.isEmpty()){
-//            throw new FieldsEmptyException("Sentence: " + sentence.isEmpty() + '\n'
-//                + "Answers: " + answers.isEmpty() + '\n'
-//                + "Checks: " + checks.isEmpty());
-//        }
-
-        question.put("sentence", sentence);
-        question.put("answers", answers);
-        question.put("isTrue", checks);
-        return question;
-    }
-
-    private class FieldsEmptyException extends Exception {
-        FieldsEmptyException(String message) {
-            super(message);
-        }
     }
 
     public void setSentence(String sentence) {
