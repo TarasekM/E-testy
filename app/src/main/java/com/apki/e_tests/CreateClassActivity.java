@@ -3,7 +3,7 @@ package com.apki.e_tests;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class CreateClass extends AppCompatActivity {
+public class CreateClassActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

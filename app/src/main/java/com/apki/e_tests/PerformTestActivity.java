@@ -13,7 +13,7 @@ import com.google.firebase.database.snapshot.Index;
 
 import java.util.ArrayList;
 
-public class PerformTest extends AppCompatActivity {
+public class PerformTestActivity extends AppCompatActivity {
 
     private Test test;
     private int questionNumber = 0;
