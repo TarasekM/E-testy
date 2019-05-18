@@ -100,22 +100,28 @@ public class PerformTest extends AppCompatActivity {
         Question currentQ;
 
 
-        float correct = 0;
-        float all = 0;
 
+        float out = 0;
 
         for(int i = 0; i < checks.length; i++){
+            float correct = 0;
+            float all = 0;
             currentQ = quest.get(i);
             ArrayList<Boolean> correctAnswers = currentQ.getChecks();
             for( int j = 0; j < checks[i].length; j++){
                 Log.d("j", j + "");
-                if (checks[i][j] == correctAnswers.get(j)){
+
+                if (correctAnswers.get(j)){
+                    all++;
+                }
+
+                if (checks[i][j] && correctAnswers.get(j)){
                     correct++;
                 }
-                all++;
             }
+            out += correct / all;
         }
-        return correct/all;
+        return out / checks.length;
     }
 
     private void changeQuestion(){
