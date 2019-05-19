@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private boolean nolog = true;
+    private boolean nolog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

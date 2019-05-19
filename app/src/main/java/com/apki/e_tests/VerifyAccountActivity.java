@@ -33,9 +33,15 @@ public class VerifyAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 user = auth.getCurrentUser();
-                user.reload();
-                startActivity(new Intent(VerifyAccountActivity.this,LoginActivity.class));
-                finish();
+
+                try {
+                    user.reload();
+                    startActivity(new Intent(VerifyAccountActivity.this,LoginActivity.class));
+                    finish();
+                }catch (NullPointerException e){
+                  Log.d("EXCEPTION", e.toString());
+                }
+
             }
         });
     }

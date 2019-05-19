@@ -14,14 +14,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apki.e_tests.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.HashMap;
@@ -35,12 +40,13 @@ public class CreateAccountActivity extends AppCompatActivity {
     private static final String TAG = "user";
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     Button dalej, dalej2;
     EditText mail, password, passwordConfirm;
 
     ConstraintLayout email_content, log_passw_content;
-    Map<String, Object> user = new HashMap<>();
+    User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +117,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 String emailData = mEdit.getText().toString();
                 if(!emailData.equals("")){
                     isValidate(emailData);
-                    user.put("email", emailData);
+                    user.setEmail(emailData);
                 }
             }
         });
@@ -167,40 +173,55 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText etPassword = findViewById(R.id.inputPassword);
                 EditText etPasswordConfirm = findViewById(R.id.inputPasswordConfirm);
+                EditText etName = findViewById(R.id.inputName);
+                EditText etSurname = findViewById(R.id.inputSurname);
 
                 String password = etPassword.getText().toString();
                 String passwordConfirm = etPasswordConfirm.getText().toString();
+                String name = etName.getText().toString();
+                String surname = etSurname.getText().toString();
+
+                user.setName(name);
+                user.setSurname(surname);
 
                 if(password.equals(passwordConfirm)){
-                    user.put("password",password);
-                    saveData(user);
+                    createUser(user, password);
                 }
-
-                Intent intent = new Intent(CreateAccountActivity.this, VerifyAccountActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
     }
 
-    private void saveData(Map user){
-        String email = user.get("email").toString();
-        String password = user.get("password").toString();
+    private void createUser(final User user, String password){
 
-        auth.createUserWithEmailAndPassword(email,password)
+        auth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Log.d(TAG, "createUserWithEmailAndPassword : success");
-                            final FirebaseUser user = auth.getCurrentUser();
-                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            final FirebaseUser firebaseUser = auth.getCurrentUser();
+                            firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        db.collection("USERS").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                Log.d("DOCUMENT", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                            }
+                                        })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("DOCUMENT", "Error adding document", e);
+                                                    }
+                                                });
+                                        Intent intent = new Intent(CreateAccountActivity.this, VerifyAccountActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                         Log.e(TAG, "successful");
                                         Toast.makeText(CreateAccountActivity.this,
-                                                "Verification email sent to " + user.getEmail(),
+                                                "Verification email sent to " + firebaseUser.getEmail(),
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
                                         Log.e(TAG, "sendEmailVerification", task.getException());
@@ -210,9 +231,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-
-
-
                         } else{
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(CreateAccountActivity.this, "Autentykacja niezakończona.",
@@ -220,6 +238,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         }
                     }
                 });
+
     }
 
     @Override

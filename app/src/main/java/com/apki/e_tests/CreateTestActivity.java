@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.apki.e_tests.Models.Question;
+import com.apki.e_tests.Models.Test;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
