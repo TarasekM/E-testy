@@ -1,4 +1,4 @@
-package com.apki.e_tests;
+package com.apki.e_tests.Models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ public class Question implements Serializable {
 
     private String label = "Pytanie";
 
-    Question(){
+    public Question(){
         answers = new ArrayList<>();
         checks = new ArrayList<>();
         sentence = "null";
     }
 
-    Question(Map<String, Object> data){
+    public Question(Map<String, Object> data){
         answers = (ArrayList<String>) data.get("answers");
         checks = (ArrayList<Boolean>) data.get("checks");
         sentence = (String) data.get("sentence");

@@ -1,4 +1,4 @@
-package com.apki.e_tests;
+package com.apki.e_tests.Models;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
