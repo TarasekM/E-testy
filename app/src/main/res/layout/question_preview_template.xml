@@ -39,7 +39,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.77"
-                app:layout_constraintStart_toEndOf="@+id/testTitleText"
+                app:layout_constraintStart_toEndOf="@+id/testName"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/edit" />
 
@@ -61,7 +61,7 @@
                 app:srcCompat="@drawable/delete" />
 
             <TextView
-                android:id="@+id/testTitleText"
+                android:id="@+id/testName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

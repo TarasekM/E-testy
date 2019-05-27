@@ -39,7 +39,7 @@
             app:layout_constraintVertical_bias="0.0">
 
             <TextView
-                android:id="@+id/testTitleText"
+                android:id="@+id/testName"
                 android:layout_width="217dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -92,7 +92,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/testTitleText"
+                app:layout_constraintTop_toBottomOf="@+id/testName"
                 app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
@@ -109,7 +109,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.7"
-                app:layout_constraintStart_toEndOf="@+id/testTitleText"
+                app:layout_constraintStart_toEndOf="@+id/testName"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.157"
                 app:srcCompat="@drawable/edit" />
@@ -129,7 +129,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/testTitleText"
+                app:layout_constraintStart_toEndOf="@+id/testName"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.157"
                 app:srcCompat="@drawable/delete" />

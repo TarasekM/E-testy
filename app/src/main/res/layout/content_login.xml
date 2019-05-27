@@ -63,12 +63,12 @@
         android:background="@drawable/rounded_input"
         android:ems="10"
         android:hint="@string/enter_email"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textCursorDrawable="@drawable/default_text_cursor"
+
+
         android:textSize="14sp"
-
-
         app:layout_constraintBottom_toTopOf="@+id/loginLink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"

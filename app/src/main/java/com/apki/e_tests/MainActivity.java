@@ -29,7 +29,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,81 +53,27 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        getSupportFragmentManager().addOnBackStackChangedListener(getListener());
 
-
-        //setUI();
-        // Add back button
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        configureFloatingAddButton();
-//        configurePlaceholder();
     }
 
-    private void setUI(){
-        db.collection("TEST")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            fillTestPreview(task.getResult());
-                        } else {
-                            Log.w("doc", "Error getting documents.", task.getException());
-                        }
+    private FragmentManager.OnBackStackChangedListener getListener(){
+        FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                FragmentManager manager = getSupportFragmentManager();
+                if (manager != null){
+                    int backStackEntryCount = manager.getBackStackEntryCount();
+                    if(backStackEntryCount == 0){
+                        finish();
                     }
-                });
-    }
-
-    private ArrayList<Test> getTestsFromDB(){
-        final ArrayList<Test> outTest = new ArrayList<>();
-        db.collection("TEST")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                outTest.add(new Test(document));
-                            }
-                        } else {
-                            Log.w("doc", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-        return outTest;
-    }
-
-
-    private void fillTestPreview(QuerySnapshot data){
-        LinearLayout testPreviewContainer = findViewById(R.id.testPreviewContainer);
-        for (QueryDocumentSnapshot document : data) {
-            Log.d("doc", document.getId() + " => " + document.getData());
-
-            View view = getLayoutInflater().inflate(R.layout.test_preview_template, null);
-            TextView testTitle = view.findViewById(R.id.testTitleText);
-            TextView subject = view.findViewById(R.id.subjectText);
-            TextView section = view.findViewById(R.id.sectionText);
-            final Test test = new Test(document);
-
-            testTitle.setText(test.getTitle());
-            subject.setText(test.getSubject());
-            section.setText(test.getSection());
-            Button startTest = view.findViewById(R.id.startTest);
-
-            startTest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, PerformTestActivity.class);
-                    intent.putExtra("TEST", test);
-                    startActivity(intent);
+                    Fragment mainClassesFragment = manager.getFragments().get(backStackEntryCount - 1);
+                    mainClassesFragment.onResume();
                 }
-            });
-
-            testPreviewContainer.addView(view, testPreviewContainer.getChildCount());
-        }
+            }
+        };
+        return result;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -170,11 +114,11 @@ public class MainActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return MainTestsFragment.newInstance(getTestsFromDB());
+                    return MainTestsFragment.newInstance();
                 case 1:
                     return MainClassesFragment.newInstance();
             }
-            return MainTestsFragment.newInstance(getTestsFromDB());
+            return MainTestsFragment.newInstance();
         }
 
         @Override
