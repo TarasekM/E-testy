@@ -1,8 +1,12 @@
 package com.apki.e_tests.Models;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-public class User {
+import java.io.Serializable;
+import java.util.Map;
+
+public class User implements Serializable {
 
     private String email;
     private String name;
@@ -21,6 +25,18 @@ public class User {
         email = (String) data.get("email");
         name = (String) data.get("name");
         surname = (String) data.get("surname");
+    }
+
+    public User(DocumentSnapshot data){
+        email = (String) data.get("email");
+        name = (String) data.get("name");
+        surname = (String) data.get("surname");
+    }
+
+    public User(Map<String, Object> map){
+        email = (String) map.get("email");
+        name = (String) map.get("name");
+        surname = (String) map.get("surname");
     }
 
     /*
@@ -57,5 +73,15 @@ public class User {
 
     public String getSurname() {
         return surname;
+    }
+
+    /*
+    * Overrides
+    * */
+
+    public boolean equals(User user){
+        return this.email.equals(user.getEmail())
+                && this.name.equals(user.getName())
+                && this.surname.equals(user.getSurname());
     }
 }
