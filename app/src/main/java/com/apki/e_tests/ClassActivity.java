@@ -1,6 +1,5 @@
 package com.apki.e_tests;
 
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,19 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.apki.e_tests.Models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
+import com.apki.e_tests.Models.LectureClass;
 
 public class ClassActivity extends AppCompatActivity {
 
@@ -43,11 +34,7 @@ public class ClassActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private ArrayList<User> users = new ArrayList<>();
-
-    private Class aClass;
+    private LectureClass aLectureClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,28 +65,7 @@ public class ClassActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private ArrayList<User> getUsersFromDB(){
-        final ArrayList<User> outUsers = new ArrayList<>();
-
-        db.collection("USERS")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Log.w("DOCUMENT", task.getResult().toString());
-                            for(QueryDocumentSnapshot data : task.getResult()){
-
-                                outUsers.add(new User(data));
-                            }
-                        } else {
-                            Log.w("doc", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-        return outUsers;
+        aLectureClass = (LectureClass) getIntent().getSerializableExtra("CLASS");
     }
 
 
@@ -141,13 +107,13 @@ public class ClassActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position){
                 case 1:
-                    return ClassShowUsersFragment.newInstance(users);
+                    return ClassShowUsersFragment.newInstance(aLectureClass);
                 case 2:
                     return ClassAddTestFragment.newInstance();
                 case 3:
                     return ClassStartTestFragment.newInstance();
             }
-            return ClassShowUsersFragment.newInstance(users);
+            return new ClassShowUsersFragment();
         }
 
         @Override

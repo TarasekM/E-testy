@@ -215,7 +215,7 @@ public class CreateTestActivity extends AppCompatActivity {
 
     private void fillQuestionPreview(View view, final Question question){
         TextView questionContent = view.findViewById(R.id.questionContent);
-        TextView questionLabel = view.findViewById(R.id.testTitleText);
+        TextView questionLabel = view.findViewById(R.id.testName);
 
         questionContent.setText(question.getSentence());
         questionLabel.setText(question.getLabel());

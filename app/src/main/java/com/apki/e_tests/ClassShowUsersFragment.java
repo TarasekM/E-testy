@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apki.e_tests.Models.LectureClass;
 import com.apki.e_tests.Models.User;
 
 import java.util.ArrayList;
@@ -30,8 +31,7 @@ public class ClassShowUsersFragment extends Fragment {
     private static final String CLASS_CODE = "";
 
     // TODO: Rename and change types of parameters
-    private ArrayList<User> users;
-    private String classCode;
+    private LectureClass aLectureClass = new LectureClass();
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,9 +46,9 @@ public class ClassShowUsersFragment extends Fragment {
      * @return A new instance of fragment ClassShowUsersFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ClassShowUsersFragment newInstance(ArrayList<User> users) {
+    public static ClassShowUsersFragment newInstance(LectureClass aLectureClass) {
         ClassShowUsersFragment fragment = new ClassShowUsersFragment();
-        fragment.users = users;
+        fragment.aLectureClass = aLectureClass;
         return fragment;
 
     }
@@ -56,10 +56,6 @@ public class ClassShowUsersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            users = USERS;
-            classCode = getArguments().getString(CLASS_CODE);
-        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -68,7 +64,8 @@ public class ClassShowUsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page_show_users, container, false);
         LinearLayout usersContainer = view.findViewById(R.id.usersContainer);
-        for (User user : users){
+
+        for (User user : aLectureClass.getStudents()){
             View userContainer = inflater.inflate(R.layout.template_user_name_preview, null);
             TextView userName = userContainer.findViewById(R.id.userNameTextView);
             int childCount = usersContainer.getChildCount();
@@ -91,7 +88,6 @@ public class ClassShowUsersFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

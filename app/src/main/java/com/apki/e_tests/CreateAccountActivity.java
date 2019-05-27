@@ -204,18 +204,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        db.collection("USERS").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Log.d("DOCUMENT", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            }
-                                        })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w("DOCUMENT", "Error adding document", e);
-                                                    }
-                                                });
+                                        db.collection("USERS").document(user.getEmail()).set(user);
                                         Intent intent = new Intent(CreateAccountActivity.this, VerifyAccountActivity.class);
                                         startActivity(intent);
                                         finish();
