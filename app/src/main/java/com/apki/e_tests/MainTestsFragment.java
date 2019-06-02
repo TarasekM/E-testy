@@ -61,7 +61,6 @@ public class MainTestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_main_tests, container, false);
         configureFloatingAddButton(view);
-//        configurePlaceholder(view);
         return view;
     }
 
